@@ -10,6 +10,9 @@ type ChatCompletionStreamChoiceDelta struct {
 	Role         string        `json:"role,omitempty"`
 	FunctionCall *FunctionCall `json:"function_call,omitempty"`
 	ToolCalls    []ToolCall    `json:"tool_calls,omitempty"`
+	Sentiment    float32       `json:"sentiment,omitempty"`
+	Intention    string        `json:"intention,omitempty"`
+	Expertise    string        `json:"expertise,omitempty"`
 }
 
 type ChatCompletionStreamChoice struct {
