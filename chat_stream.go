@@ -11,7 +11,7 @@ type ChatCompletionStreamChoiceDelta struct {
 	FunctionCall *FunctionCall `json:"function_call,omitempty"`
 	ToolCalls    []ToolCall    `json:"tool_calls,omitempty"`
 	Sentiment    float32       `json:"sentiment,omitempty"`
-	Intention    string        `json:"intention,omitempty"`
+	Intentions   []string      `json:"intentions,omitempty"`
 	Expertise    string        `json:"expertise,omitempty"`
 }
 
