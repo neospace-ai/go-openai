@@ -97,6 +97,8 @@ type ChatCompletionMessage struct {
 
 	// For Role=tool prompts this should be set to the ID given in the assistant's prior request to call a tool.
 	ToolCallID string `json:"tool_call_id,omitempty"`
+	// A simple string describing the guard rails that were triggered.
+	GuardRails string `json:"guard_rails,omitempty"`
 }
 
 func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
@@ -112,6 +114,7 @@ func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
 			FunctionCall *FunctionCall     `json:"function_call,omitempty"`
 			ToolCalls    []ToolCall        `json:"tool_calls,omitempty"`
 			ToolCallID   string            `json:"tool_call_id,omitempty"`
+			GuardRails   string            `json:"guard_rails,omitempty"`
 		}(m)
 		return json.Marshal(msg)
 	}
@@ -123,6 +126,7 @@ func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
 		FunctionCall *FunctionCall     `json:"function_call,omitempty"`
 		ToolCalls    []ToolCall        `json:"tool_calls,omitempty"`
 		ToolCallID   string            `json:"tool_call_id,omitempty"`
+		GuardRails   string            `json:"guard_rails,omitempty"`
 	}(m)
 	return json.Marshal(msg)
 }
@@ -136,6 +140,7 @@ func (m *ChatCompletionMessage) UnmarshalJSON(bs []byte) error {
 		FunctionCall *FunctionCall `json:"function_call,omitempty"`
 		ToolCalls    []ToolCall    `json:"tool_calls,omitempty"`
 		ToolCallID   string        `json:"tool_call_id,omitempty"`
+		GuardRails   string        `json:"guard_rails,omitempty"`
 	}{}
 	if err := json.Unmarshal(bs, &msg); err == nil {
 		*m = ChatCompletionMessage(msg)
@@ -149,6 +154,7 @@ func (m *ChatCompletionMessage) UnmarshalJSON(bs []byte) error {
 		FunctionCall *FunctionCall     `json:"function_call,omitempty"`
 		ToolCalls    []ToolCall        `json:"tool_calls,omitempty"`
 		ToolCallID   string            `json:"tool_call_id,omitempty"`
+		GuardRails   string            `json:"guard_rails,omitempty"`
 	}{}
 	if err := json.Unmarshal(bs, &multiMsg); err != nil {
 		return err
