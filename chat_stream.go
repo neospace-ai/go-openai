@@ -13,6 +13,7 @@ type ChatCompletionStreamChoiceDelta struct {
 	Sentiment    float32       `json:"sentiment,omitempty"`
 	Intentions   []string      `json:"intentions,omitempty"`
 	Expertise    string        `json:"expertise,omitempty"`
+	GuardRail    string        `json:"guardrail,omitempty"`
 }
 
 type ChatCompletionStreamChoice struct {
