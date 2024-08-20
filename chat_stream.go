@@ -5,15 +5,24 @@ import (
 	"net/http"
 )
 
+type ChatCompletionGuardRail struct {
+	Type     string `json:"type"`
+	Category string `json:"category"`
+}
+
+type ChatCompletionAnalisys struct {
+	Expertise string  `json:"expertise"`
+	Sentiment float32 `json:"sentiment"`
+	Reasoning string  `json:"reasoning"`
+}
+
 type ChatCompletionStreamChoiceDelta struct {
-	Content      string        `json:"content,omitempty"`
-	Role         string        `json:"role,omitempty"`
-	FunctionCall *FunctionCall `json:"function_call,omitempty"`
-	ToolCalls    []ToolCall    `json:"tool_calls,omitempty"`
-	Sentiment    float32       `json:"sentiment,omitempty"`
-	Intentions   []string      `json:"intentions,omitempty"`
-	Expertise    string        `json:"expertise,omitempty"`
-	GuardRail    string        `json:"guardrail,omitempty"`
+	Content      string                   `json:"content,omitempty"`
+	Role         string                   `json:"role,omitempty"`
+	FunctionCall *FunctionCall            `json:"function_call,omitempty"`
+	ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
+	Analisys     *ChatCompletionAnalisys  `json:"analisys,omitempty"`
+	GuardRail    *ChatCompletionGuardRail `json:"guard,omitempty"`
 }
 
 type ChatCompletionStreamChoice struct {
