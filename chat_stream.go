@@ -5,6 +5,16 @@ import (
 	"net/http"
 )
 
+const (
+	SPECIAL_TOKEN_BEGIN_TEXT     = "<|begin_of_text|>"
+	SPECIAL_TOKEN_START_HEADER   = "<|start_header_id|>"
+	SPECIAL_TOKEN_END_HEADER     = "<|end_header_id|>"
+	SPECIAL_TOKEN_EOT            = "<|eot_id|>"
+	SPECIAL_TOKEN_START_ANALYSIS = "<|start_analysis|>"
+	SPECIAL_TOKEN_END_ANALYSIS   = "<|end_analysis|>"
+	SPECIAL_TOKEN_TOOLS_REQUEST  = "<|tools_request|>"
+)
+
 type ChatCompletionGuardRail struct {
 	Type     string `json:"type"`
 	Category string `json:"category"`
