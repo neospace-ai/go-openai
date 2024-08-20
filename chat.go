@@ -239,7 +239,8 @@ type StreamOptions struct {
 type ToolType string
 
 const (
-	ToolTypeFunction ToolType = "function"
+	ToolTypeFunction         ToolType = "function"
+	ToolTypeBuiltInFunctiopn ToolType = "built_in_function"
 )
 
 type Tool struct {
