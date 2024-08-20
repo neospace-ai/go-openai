@@ -79,6 +79,17 @@ type ChatMessagePart struct {
 	ImageURL *ChatMessageImageURL `json:"image_url,omitempty"`
 }
 
+type ChatCompletionGuardRail struct {
+	Type     string `json:"type"`
+	Category string `json:"category"`
+}
+
+type ChatCompletionAnalisys struct {
+	Expertise string  `json:"expertise"`
+	Sentiment float32 `json:"sentiment"`
+	Reasoning string  `json:"reasoning"`
+}
+
 type ChatCompletionMessage struct {
 	Role         string `json:"role"`
 	Content      string `json:"content"`
@@ -98,7 +109,8 @@ type ChatCompletionMessage struct {
 	// For Role=tool prompts this should be set to the ID given in the assistant's prior request to call a tool.
 	ToolCallID string `json:"tool_call_id,omitempty"`
 	// A simple string describing the guard rails that were triggered.
-	GuardRails string `json:"guard_rails,omitempty"`
+	GuardRails *ChatCompletionGuardRail `json:"guard,omitempty"`
+	Analysis   *ChatCompletionAnalisys  `json:"analysis,omitempty"`
 }
 
 func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {

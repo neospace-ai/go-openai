@@ -16,17 +16,6 @@ const (
 	SPECIAL_TOKEN_GUARD_RAIL     = "<|guard|>"
 )
 
-type ChatCompletionGuardRail struct {
-	Type     string `json:"type"`
-	Category string `json:"category"`
-}
-
-type ChatCompletionAnalisys struct {
-	Expertise string  `json:"expertise"`
-	Sentiment float32 `json:"sentiment"`
-	Reasoning string  `json:"reasoning"`
-}
-
 type ChatCompletionStreamChoiceDelta struct {
 	Content      string                   `json:"content,omitempty"`
 	Role         string                   `json:"role,omitempty"`
