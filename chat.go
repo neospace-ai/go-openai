@@ -119,26 +119,28 @@ func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
 	}
 	if len(m.MultiContent) > 0 {
 		msg := struct {
-			Role         string            `json:"role"`
-			Content      string            `json:"-"`
-			MultiContent []ChatMessagePart `json:"content,omitempty"`
-			Name         string            `json:"name,omitempty"`
-			FunctionCall *FunctionCall     `json:"function_call,omitempty"`
-			ToolCalls    []ToolCall        `json:"tool_calls,omitempty"`
-			ToolCallID   string            `json:"tool_call_id,omitempty"`
-			GuardRails   string            `json:"guard_rails,omitempty"`
+			Role         string                   `json:"role"`
+			Content      string                   `json:"-"`
+			MultiContent []ChatMessagePart        `json:"content,omitempty"`
+			Name         string                   `json:"name,omitempty"`
+			FunctionCall *FunctionCall            `json:"function_call,omitempty"`
+			ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
+			ToolCallID   string                   `json:"tool_call_id,omitempty"`
+			GuardRails   *ChatCompletionGuardRail `json:"guard,omitempty"`
+			Analysis     *ChatCompletionAnalisys  `json:"analysis,omitempty"`
 		}(m)
 		return json.Marshal(msg)
 	}
 	msg := struct {
-		Role         string            `json:"role"`
-		Content      string            `json:"content"`
-		MultiContent []ChatMessagePart `json:"-"`
-		Name         string            `json:"name,omitempty"`
-		FunctionCall *FunctionCall     `json:"function_call,omitempty"`
-		ToolCalls    []ToolCall        `json:"tool_calls,omitempty"`
-		ToolCallID   string            `json:"tool_call_id,omitempty"`
-		GuardRails   string            `json:"guard_rails,omitempty"`
+		Role         string                   `json:"role"`
+		Content      string                   `json:"content"`
+		MultiContent []ChatMessagePart        `json:"-"`
+		Name         string                   `json:"name,omitempty"`
+		FunctionCall *FunctionCall            `json:"function_call,omitempty"`
+		ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
+		ToolCallID   string                   `json:"tool_call_id,omitempty"`
+		GuardRails   *ChatCompletionGuardRail `json:"guard,omitempty"`
+		Analysis     *ChatCompletionAnalisys  `json:"analysis,omitempty"`
 	}(m)
 	return json.Marshal(msg)
 }
@@ -148,11 +150,12 @@ func (m *ChatCompletionMessage) UnmarshalJSON(bs []byte) error {
 		Role         string `json:"role"`
 		Content      string `json:"content"`
 		MultiContent []ChatMessagePart
-		Name         string        `json:"name,omitempty"`
-		FunctionCall *FunctionCall `json:"function_call,omitempty"`
-		ToolCalls    []ToolCall    `json:"tool_calls,omitempty"`
-		ToolCallID   string        `json:"tool_call_id,omitempty"`
-		GuardRails   string        `json:"guard_rails,omitempty"`
+		Name         string                   `json:"name,omitempty"`
+		FunctionCall *FunctionCall            `json:"function_call,omitempty"`
+		ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
+		ToolCallID   string                   `json:"tool_call_id,omitempty"`
+		GuardRails   *ChatCompletionGuardRail `json:"guard,omitempty"`
+		Analysis     *ChatCompletionAnalisys  `json:"analysis,omitempty"`
 	}{}
 	if err := json.Unmarshal(bs, &msg); err == nil {
 		*m = ChatCompletionMessage(msg)
@@ -161,12 +164,13 @@ func (m *ChatCompletionMessage) UnmarshalJSON(bs []byte) error {
 	multiMsg := struct {
 		Role         string `json:"role"`
 		Content      string
-		MultiContent []ChatMessagePart `json:"content"`
-		Name         string            `json:"name,omitempty"`
-		FunctionCall *FunctionCall     `json:"function_call,omitempty"`
-		ToolCalls    []ToolCall        `json:"tool_calls,omitempty"`
-		ToolCallID   string            `json:"tool_call_id,omitempty"`
-		GuardRails   string            `json:"guard_rails,omitempty"`
+		MultiContent []ChatMessagePart        `json:"content"`
+		Name         string                   `json:"name,omitempty"`
+		FunctionCall *FunctionCall            `json:"function_call,omitempty"`
+		ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
+		ToolCallID   string                   `json:"tool_call_id,omitempty"`
+		GuardRails   *ChatCompletionGuardRail `json:"guard,omitempty"`
+		Analysis     *ChatCompletionAnalisys  `json:"analysis,omitempty"`
 	}{}
 	if err := json.Unmarshal(bs, &multiMsg); err != nil {
 		return err
