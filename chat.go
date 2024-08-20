@@ -84,7 +84,7 @@ type ChatCompletionGuardRail struct {
 	Category string `json:"category"`
 }
 
-type ChatCompletionAnalisys struct {
+type ChatCompletionAnalysis struct {
 	Expertise string  `json:"expertise"`
 	Sentiment float32 `json:"sentiment"`
 	Reasoning string  `json:"reasoning"`
@@ -110,7 +110,7 @@ type ChatCompletionMessage struct {
 	ToolCallID string `json:"tool_call_id,omitempty"`
 	// A simple string describing the guard rails that were triggered.
 	GuardRails *ChatCompletionGuardRail `json:"guard,omitempty"`
-	Analysis   *ChatCompletionAnalisys  `json:"analysis,omitempty"`
+	Analysis   *ChatCompletionAnalysis  `json:"analysis,omitempty"`
 }
 
 func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
@@ -127,7 +127,7 @@ func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
 			ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
 			ToolCallID   string                   `json:"tool_call_id,omitempty"`
 			GuardRails   *ChatCompletionGuardRail `json:"guard,omitempty"`
-			Analysis     *ChatCompletionAnalisys  `json:"analysis,omitempty"`
+			Analysis     *ChatCompletionAnalysis  `json:"analysis,omitempty"`
 		}(m)
 		return json.Marshal(msg)
 	}
@@ -140,7 +140,7 @@ func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
 		ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
 		ToolCallID   string                   `json:"tool_call_id,omitempty"`
 		GuardRails   *ChatCompletionGuardRail `json:"guard,omitempty"`
-		Analysis     *ChatCompletionAnalisys  `json:"analysis,omitempty"`
+		Analysis     *ChatCompletionAnalysis  `json:"analysis,omitempty"`
 	}(m)
 	return json.Marshal(msg)
 }
@@ -155,7 +155,7 @@ func (m *ChatCompletionMessage) UnmarshalJSON(bs []byte) error {
 		ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
 		ToolCallID   string                   `json:"tool_call_id,omitempty"`
 		GuardRails   *ChatCompletionGuardRail `json:"guard,omitempty"`
-		Analysis     *ChatCompletionAnalisys  `json:"analysis,omitempty"`
+		Analysis     *ChatCompletionAnalysis  `json:"analysis,omitempty"`
 	}{}
 	if err := json.Unmarshal(bs, &msg); err == nil {
 		*m = ChatCompletionMessage(msg)
@@ -170,7 +170,7 @@ func (m *ChatCompletionMessage) UnmarshalJSON(bs []byte) error {
 		ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
 		ToolCallID   string                   `json:"tool_call_id,omitempty"`
 		GuardRails   *ChatCompletionGuardRail `json:"guard,omitempty"`
-		Analysis     *ChatCompletionAnalisys  `json:"analysis,omitempty"`
+		Analysis     *ChatCompletionAnalysis  `json:"analysis,omitempty"`
 	}{}
 	if err := json.Unmarshal(bs, &multiMsg); err != nil {
 		return err
