@@ -13,6 +13,7 @@ const (
 	SPECIAL_TOKEN_START_ANALYSIS = "<|start_analysis|>"
 	SPECIAL_TOKEN_END_ANALYSIS   = "<|end_analysis|>"
 	SPECIAL_TOKEN_TOOLS_REQUEST  = "<|tools_request|>"
+	SPECIAL_TOKEN_GUARD_RAIL     = "<|guard|>"
 )
 
 type ChatCompletionGuardRail struct {
