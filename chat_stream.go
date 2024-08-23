@@ -87,3 +87,14 @@ func (c *Client) CreateChatCompletionStream(
 	}
 	return
 }
+
+// Creates a different instance of the client with a different base URL and generates a chat completion.
+func (c *Client) CreateChatCompletionStreamCustomBaseURL(
+	ctx context.Context,
+	request ChatCompletionRequest,
+	baseURL string,
+) (stream *ChatCompletionStream, err error) {
+	anotherC := *c
+	anotherC.config.BaseURL = baseURL
+	return anotherC.CreateChatCompletionStream(ctx, request)
+}
