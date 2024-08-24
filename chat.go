@@ -85,9 +85,9 @@ type ChatCompletionGuardRail struct {
 }
 
 type ChatCompletionAnalysis struct {
-	Expertise string  `json:"expertise"`
-	Sentiment float32 `json:"sentiment"`
-	Reasoning string  `json:"reasoning"`
+	Expertise string `json:"expertise"`
+	Sentiment string `json:"sentiment"`
+	Reasoning string `json:"reasoning"`
 }
 
 type ChatCompletionMessage struct {
