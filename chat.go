@@ -378,3 +378,17 @@ func (c *Client) CreateChatCompletion(
 	err = c.sendRequest(req, &response)
 	return
 }
+
+// CreateChatCompletion but you can pass a different URL
+func (c *Client) CreateChatCompletionWithCustomURL(
+	ctx context.Context,
+	request ChatCompletionRequest,
+	customURL string,
+) (response ChatCompletionResponse, err error) {
+	cc := *c
+	if customURL != "" {
+		cc.config.BaseURL = customURL
+	}
+	cc.CreateChatCompletion(ctx, request)
+	return
+}
