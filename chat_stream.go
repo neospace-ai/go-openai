@@ -21,7 +21,7 @@ type ChatCompletionStreamChoiceDelta struct {
 	Role         string                   `json:"role,omitempty"`
 	FunctionCall *FunctionCall            `json:"function_call,omitempty"`
 	ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
-	Analysis     *ChatCompletionAnalysis  `json:"Analysis,omitempty"`
+	Analysis     *ChatCompletionAnalysis  `json:"analysis,omitempty"`
 	GuardRail    *ChatCompletionGuardRail `json:"guard,omitempty"`
 }
 
