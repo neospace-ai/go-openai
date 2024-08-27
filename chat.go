@@ -80,8 +80,8 @@ type ChatMessagePart struct {
 }
 
 type ChatCompletionGuardRail struct {
-	Type     string `json:"type"`
-	Category string `json:"category"`
+	Type     string   `json:"type"`
+	Category []string `json:"category"`
 }
 
 type ChatCompletionAnalysis struct {
