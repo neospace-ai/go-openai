@@ -389,6 +389,6 @@ func (c *Client) CreateChatCompletionWithCustomURL(
 	if customURL != "" {
 		cc.config.BaseURL = customURL
 	}
-	cc.CreateChatCompletion(ctx, request)
-	return
+
+	return cc.CreateChatCompletion(ctx, request)
 }
