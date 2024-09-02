@@ -77,6 +77,8 @@ func (c *Client) CreateChatCompletionStream(
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer Us3TLEzrBVnUljAGGwRZOXQz6npQXK0I")
 
 	resp, err := sendRequestStream[ChatCompletionStreamResponse](c, req)
 	if err != nil {
