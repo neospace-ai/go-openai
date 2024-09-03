@@ -30,6 +30,7 @@ const defaultAssistantVersion = "v2" // upgrade to v2 to support vector store
 type ClientConfig struct {
 	authToken string
 
+	ContentType          string
 	BaseURL              string
 	OrgID                string
 	APIType              APIType
@@ -39,6 +40,29 @@ type ClientConfig struct {
 	HTTPClient           *http.Client
 
 	EmptyMessagesLimit uint
+}
+
+// Generates a new configuration with the given parameters.
+func NewConfig(authToken string, config ClientConfig) ClientConfig {
+	if authToken == "" {
+		panic("authToken is required")
+	}
+	if config.BaseURL == "" {
+		config.BaseURL = openaiAPIURLv1
+	}
+	if config.APIType == "" {
+		config.APIType = APITypeOpenAI
+	}
+	if config.AssistantVersion == "" {
+		config.AssistantVersion = defaultAssistantVersion
+	}
+	if config.HTTPClient == nil {
+		config.HTTPClient = &http.Client{}
+	}
+	if config.EmptyMessagesLimit == 0 {
+		config.EmptyMessagesLimit = defaultEmptyMessagesLimit
+	}
+	return config
 }
 
 func DefaultConfig(authToken string) ClientConfig {

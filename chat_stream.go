@@ -77,8 +77,6 @@ func (c *Client) CreateChatCompletionStream(
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer Us3TLEzrBVnUljAGGwRZOXQz6npQXK0I")
 
 	resp, err := sendRequestStream[ChatCompletionStreamResponse](c, req)
 	if err != nil {
@@ -88,15 +86,4 @@ func (c *Client) CreateChatCompletionStream(
 		streamReader: resp,
 	}
 	return
-}
-
-// Creates a different instance of the client with a different base URL and generates a chat completion.
-func (c *Client) CreateChatCompletionStreamCustomBaseURL(
-	ctx context.Context,
-	request ChatCompletionRequest,
-	baseURL string,
-) (stream *ChatCompletionStream, err error) {
-	anotherC := *c
-	anotherC.config.BaseURL = baseURL
-	return anotherC.CreateChatCompletionStream(ctx, request)
 }
