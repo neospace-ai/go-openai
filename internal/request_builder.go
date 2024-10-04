@@ -3,6 +3,7 @@ package openai
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -31,17 +32,19 @@ func (b *HTTPRequestBuilder) Build(
 	var bodyReader io.Reader
 	if body != nil {
 		if v, ok := body.(io.Reader); ok {
+			fmt.Printf("NEOSPACE CUSTOM OPENAI IO.READER: %v", v)
 			bodyReader = v
-		} else {
-			var reqBytes []byte
-			reqBytes, err = b.marshaller.Marshal(body)
-			if err != nil {
-				return
-			}
-			bodyReader = bytes.NewBuffer(reqBytes)
 		}
+
+		var reqBytes []byte
+		reqBytes, err = b.marshaller.Marshal(body)
+		if err != nil {
+			return
+		}
+		bodyReader = bytes.NewBuffer(reqBytes)
 	}
-	req, err = http.NewRequestWithContext(ctx, method, url, bodyReader)
+
+	req, err = http.NewRequest("POST", url, bodyReader)
 	if err != nil {
 		return
 	}
