@@ -6,14 +6,43 @@ import (
 )
 
 const (
-	SPECIAL_TOKEN_BEGIN_TEXT     = "<|begin_of_text|>"
-	SPECIAL_TOKEN_START_HEADER   = "<|start_header_id|>"
-	SPECIAL_TOKEN_END_HEADER     = "<|end_header_id|>"
-	SPECIAL_TOKEN_EOT            = "<|eot_id|>"
-	SPECIAL_TOKEN_START_ANALYSIS = "<|start_analysis|>"
-	SPECIAL_TOKEN_END_ANALYSIS   = "<|end_analysis|>"
-	SPECIAL_TOKEN_TOOLS_REQUEST  = "<|tools_request|>"
-	SPECIAL_TOKEN_GUARD_RAIL     = "<|guard|>"
+	SPECIAL_TOKEN_BEGIN_TEXT               = "<|begin_of_text|>"
+	SPECIAL_TOKEN_START_HEADER             = "<|start_header_id|>"
+	SPECIAL_TOKEN_END_HEADER               = "<|end_header_id|>"
+	SPECIAL_TOKEN_EOT                      = "<|eot_id|>"
+	SPECIAL_TOKEN_START_ANALYSIS           = "<|start_analysis|>"
+	SPECIAL_TOKEN_END_ANALYSIS             = "<|end_analysis|>"
+	SPECIAL_TOKEN_TOOLS_REQUEST            = "<|tools_request|>"
+	SPECIAL_TOKEN_GUARD_RAIL               = "<|guard|>"
+	SPECIAL_TOKEN_SYSTEM                   = "<|system|>"
+	SPECIAL_TOKEN_COMPANY                  = "<|company|>"
+	SPECIAL_TOKEN_WHO_I_AM                 = "<|who_i_am|>"
+	SPECIAL_TOKEN_EXPERTISES_ONLY          = "<|expertises_only|>"
+	SPECIAL_TOKEN_DATETIME                 = "<|datetime|>"
+	SPECIAL_TOKEN_CUSTOMER                 = "<|customer|>"
+	SPECIAL_TOKEN_USER_PROMPT              = "<|user_prompt|>"
+	SPECIAL_TOKEN_ASSISTANT                = "<|assistant|>"
+	SPECIAL_TOKEN_TASK_GUARD               = "<|task_guard|>"
+	SPECIAL_TOKEN_GUARD_REASONING          = "<|guard_reasoning|>"
+	SPECIAL_TOKEN_GUARD_SAFE               = "<|guard_safe|>"
+	SPECIAL_TOKEN_GUARD_UNSAFE             = "<|guard_unsafe|>"
+	SPECIAL_TOKEN_UNSAFE_CATEGORY          = "<|unsafe_category|>"
+	SPECIAL_TOKEN_END_TASK                 = "<|end_task|>"
+	SPECIAL_TOKEN_TASK_SELECT_EXPERTISE    = "<|task_select_expertise|>"
+	SPECIAL_TOKEN_SEARCH                   = "<|search|>"
+	SPECIAL_TOKEN_END_SEARCH               = "<|end_search|>"
+	SPECIAL_TOKEN_POTENTIAL_EXPERTISES     = "<|potential_expertises|>"
+	SPECIAL_TOKEN_NAME                     = "<|name|>"
+	SPECIAL_TOKEN_DESCRIPTION              = "<|description|>"
+	SPECIAL_TOKEN_SEPARATOR                = "<|sep|>"
+	SPECIAL_TOKEN_END_POTENTIAL_EXPERTISES = "<|end_potential_expertises|>"
+	SPECIAL_TOKEN_CHOSEN_EXPERTISES        = "<|chosen_expertises|>"
+	SPECIAL_TOKEN_END_OF_TASK              = "<|end_of_task|>"
+)
+
+const (
+	TASK_TYPE_GUARD             = "guard"
+	TASK_TYPE_SELECT_EXPERTISES = "select_expertises"
 )
 
 type ChatCompletionStreamChoiceDelta struct {
