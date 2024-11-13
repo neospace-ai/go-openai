@@ -46,12 +46,13 @@ const (
 )
 
 type ChatCompletionStreamChoiceDelta struct {
+	Reasoning    string                   `json:"reasoning,omitempty"`
 	Content      string                   `json:"content,omitempty"`
 	Role         string                   `json:"role,omitempty"`
 	FunctionCall *FunctionCall            `json:"function_call,omitempty"`
 	ToolCalls    []ToolCall               `json:"tool_calls,omitempty"`
-	Analysis     *ChatCompletionAnalysis  `json:"analysis,omitempty"`
-	GuardRail    *ChatCompletionGuardRail `json:"guard,omitempty"`
+	Analysis     *ChatCompletionAnalysis  `json:"analysis,omitempty"` // DEPRECATED
+	GuardRail    *ChatCompletionGuardRail `json:"guard,omitempty"`    // DEPRECATED
 }
 
 type ChatCompletionStreamChoice struct {
@@ -59,6 +60,7 @@ type ChatCompletionStreamChoice struct {
 	Delta                ChatCompletionStreamChoiceDelta `json:"delta"`
 	FinishReason         FinishReason                    `json:"finish_reason"`
 	ContentFilterResults ContentFilterResults            `json:"content_filter_results,omitempty"`
+	TaskResults          TaskResultCollection            `json:"task_results,omitempty"`
 }
 
 type PromptFilterResult struct {

@@ -93,6 +93,7 @@ type ChatCompletionAnalysis struct {
 type ChatCompletionMessage struct {
 	Role         string `json:"role"`
 	Content      string `json:"content"`
+	Reasoning    string `json:"reasoning,omitempty"`
 	MultiContent []ChatMessagePart
 
 	// This property isn't in the official documentation, but it's in
@@ -109,8 +110,8 @@ type ChatCompletionMessage struct {
 	// For Role=tool prompts this should be set to the ID given in the assistant's prior request to call a tool.
 	ToolCallID string `json:"tool_call_id,omitempty"`
 	// A simple string describing the guard rails that were triggered.
-	GuardRails *ChatCompletionGuardRail `json:"guard,omitempty"`
-	Analysis   *ChatCompletionAnalysis  `json:"analysis,omitempty"`
+	GuardRails *ChatCompletionGuardRail `json:"guard,omitempty"`    // DEPRECATED
+	Analysis   *ChatCompletionAnalysis  `json:"analysis,omitempty"` // DEPRECATED
 }
 
 func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
@@ -121,6 +122,7 @@ func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
 		msg := struct {
 			Role         string                   `json:"role"`
 			Content      string                   `json:"-"`
+			Reasoning    string                   `json:"reasoning,omitempty"`
 			MultiContent []ChatMessagePart        `json:"content,omitempty"`
 			Name         string                   `json:"name,omitempty"`
 			FunctionCall *FunctionCall            `json:"function_call,omitempty"`
@@ -134,6 +136,7 @@ func (m ChatCompletionMessage) MarshalJSON() ([]byte, error) {
 	msg := struct {
 		Role         string                   `json:"role"`
 		Content      string                   `json:"content"`
+		Reasoning    string                   `json:"reasoning,omitempty"`
 		MultiContent []ChatMessagePart        `json:"-"`
 		Name         string                   `json:"name,omitempty"`
 		FunctionCall *FunctionCall            `json:"function_call,omitempty"`
@@ -149,6 +152,7 @@ func (m *ChatCompletionMessage) UnmarshalJSON(bs []byte) error {
 	msg := struct {
 		Role         string `json:"role"`
 		Content      string `json:"content"`
+		Reasoning    string `json:"reasoning,omitempty"`
 		MultiContent []ChatMessagePart
 		Name         string                   `json:"name,omitempty"`
 		FunctionCall *FunctionCall            `json:"function_call,omitempty"`
@@ -164,6 +168,7 @@ func (m *ChatCompletionMessage) UnmarshalJSON(bs []byte) error {
 	multiMsg := struct {
 		Role         string `json:"role"`
 		Content      string
+		Reasoning    string                   `json:"reasoning,omitempty"`
 		MultiContent []ChatMessagePart        `json:"content"`
 		Name         string                   `json:"name,omitempty"`
 		FunctionCall *FunctionCall            `json:"function_call,omitempty"`
@@ -337,8 +342,9 @@ type ChatCompletionChoice struct {
 	// function_call: The model decided to call a function
 	// content_filter: Omitted content due to a flag from our content filters
 	// null: API response still in progress or incomplete
-	FinishReason FinishReason `json:"finish_reason"`
-	LogProbs     *LogProbs    `json:"logprobs,omitempty"`
+	FinishReason FinishReason         `json:"finish_reason"`
+	LogProbs     *LogProbs            `json:"logprobs,omitempty"`
+	TaskResults  TaskResultCollection `json:"task_results,omitempty"`
 }
 
 // ChatCompletionResponse represents a response structure for chat completion API.
