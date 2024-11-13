@@ -1,5 +1,7 @@
 package openai
 
+const DEFAULT_EXPERTISE = "discovering"
+
 type TaskGuard struct {
 	Safe            bool     `json:"safe"`
 	GuardReasoning  string   `json:"guard_reasoning"`
