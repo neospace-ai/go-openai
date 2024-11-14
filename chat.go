@@ -384,3 +384,22 @@ func (c *Client) CreateChatCompletion(
 	err = c.sendRequest(req, &response)
 	return
 }
+
+func (c *Client) CreateSupervisorCompletion(
+	ctx context.Context,
+	request SupervisorRequest,
+) (response SupervisorResponse, err error) {
+	urlSuffix := chatCompletionsSuffix
+	if !checkEndpointSupportsModel(urlSuffix, request.Model) {
+		err = ErrChatCompletionInvalidModel
+		return
+	}
+
+	req, err := c.newRequest(ctx, http.MethodPost, c.fullURL(urlSuffix, request.Model), withBody(request))
+	if err != nil {
+		return
+	}
+
+	err = c.sendRequest(req, &response)
+	return
+}
