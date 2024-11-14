@@ -14,7 +14,7 @@ type PotentialExpertise struct {
 }
 
 type TaskSelectExpertises struct {
-	SearchQuery           string               `json:"search_query"`
+	SearchQuery           []string             `json:"search_query"`
 	PotentialExpertises   []PotentialExpertise `json:"potential_expertises"`
 	ChosenExpertises      []string             `json:"chosen_expertises"`
 	SelectExpertiseAnswer string               `json:"select_expertise_answer"`
