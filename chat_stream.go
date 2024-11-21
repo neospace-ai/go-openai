@@ -40,11 +40,6 @@ const (
 	SPECIAL_TOKEN_END_OF_TASK              = "<|end_of_task|>"
 )
 
-const (
-	TASK_TYPE_GUARD             = "guard"
-	TASK_TYPE_SELECT_EXPERTISES = "select_expertises"
-)
-
 type ChatCompletionStreamChoiceDelta struct {
 	Reasoning    string                   `json:"reasoning,omitempty"`
 	Content      string                   `json:"content,omitempty"`
