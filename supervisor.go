@@ -4,7 +4,7 @@ package openai
 type SupervisorRequest struct {
 	Model        string                  `json:"model"`
 	History      []ChatCompletionMessage `json:"history"`
-	InstructTask TaskResultCollection    `json:"instruct_task"`
+	InstructTask GenericTask             `json:"instruct_task"`
 	MaxTokens    int                     `json:"max_tokens"`
 	Temperature  float64                 `json:"temperature"`
 	TopP         int                     `json:"top_p"`
