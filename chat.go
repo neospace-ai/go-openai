@@ -17,6 +17,7 @@ const (
 )
 
 const chatCompletionsSuffix = "/chat/completions"
+const supervisorSuffix = "/supervisor"
 
 var (
 	ErrChatCompletionInvalidModel       = errors.New("this model is not supported with this method, please use CreateCompletion client method instead") //nolint:lll
@@ -389,7 +390,7 @@ func (c *Client) CreateSupervisorCompletion(
 	ctx context.Context,
 	request SupervisorRequest,
 ) (response SupervisorResponse, err error) {
-	urlSuffix := chatCompletionsSuffix
+	urlSuffix := supervisorSuffix
 	if !checkEndpointSupportsModel(urlSuffix, request.Model) {
 		err = ErrChatCompletionInvalidModel
 		return
