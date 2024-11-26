@@ -23,26 +23,28 @@ type SupervisorResponse struct {
 }
 
 type SupervisorScore struct {
-	Index        int    `json:"index"`
-	SpecialToken int    `json:"special_token"`
-	Name         string `json:"name"`
-	Description  string `json:"description"`
+	Token       int    `json:"token"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Value       int    `json:"value"`
 }
+
+// Map in format: {Name: Details}
+type SupervisorAvailableScores map[string]SupervisorScore
 
 type SupervisorCategory struct {
-	Category        string            `json:"category"`
-	Decription      string            `json:"description"`
-	AvailableScores []SupervisorScore `json:"available_scores"`
+	Decription      string                    `json:"description"`
+	AvailableScores SupervisorAvailableScores `json:"available_scores"`
+	Threshold       int                       `json:"threshold"`
 }
 
+// Map in format: {Name: Details}
+type SupervisorCategories map[string]SupervisorCategory
+
 type SupervisorChoice struct {
-	Index        int                  `json:"index"`
-	LogProbs     *LogProbs            `json:"logprobs,omitempty"`
-	RawResponse  string               `json:"raw_response"`
-	Task         string               `json:"task"`
-	InstructTask any                  `json:"instruct_task"`
-	Categories   []SupervisorCategory `json:"categories"`
-	Reasoning    string               `json:"reasoning"`
-	Score        []string             `json:"score"`
-	Feedback     string               `json:"feedback"`
+	Index        int            `json:"index"`
+	LogProbs     *LogProbs      `json:"logprobs,omitempty"`
+	TaskName     string         `json:"task"`
+	InstructTask any            `json:"instruct_task"`
+	Result       TaskSupervisor `json:"result"`
 }

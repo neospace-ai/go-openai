@@ -60,3 +60,22 @@ type GenericTask struct {
 	TaskType string `json:"task_type"`
 	Task     any    `json:"task"`
 }
+
+type SupervisorTaskScore struct {
+	Token       int    `json:"token"`
+	Description string `json:"description"`
+}
+
+type SupervisorTaskCategory struct {
+	Name            string            `json:"name"`
+	Decription      string            `json:"description"`
+	AvailableScores []SupervisorScore `json:"available_scores"`
+	Chosen          *int              `json:"chosen"`
+}
+
+type TaskSupervisor struct {
+	RawResponse string                   `json:"raw_response"`
+	Categories  []SupervisorTaskCategory `json:"categories"`
+	Reasoning   string                   `json:"reasoning"`
+	Feedback    string                   `json:"feedback"`
+}
