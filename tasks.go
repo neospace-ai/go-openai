@@ -79,3 +79,14 @@ type TaskSupervisor struct {
 	Reasoning   string                   `json:"reasoning"`
 	Feedback    string                   `json:"feedback"`
 }
+
+
+type TaskDefinition struct {
+	Name 	  string `json:"name"`
+	Description string `json:"description"`
+}
+
+var GUARD_TASK_DEFINITION = TaskDefinition{
+	Name: "task_guard",
+	Description: "A task Guard têm como objetivo analisar e assegurar a segurança de mensagens de usuários e classificá-las em categorias de risco de modo que siga princípios éticos, morais e legais."
+}

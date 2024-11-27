@@ -48,3 +48,89 @@ type SupervisorChoice struct {
 	InstructTask any            `json:"instruct_task"`
 	Result       TaskSupervisor `json:"result"`
 }
+
+func (req SupervisorRequest) ToNeolangInput(categories SupervisorCategories) any {
+	type supervisorContext struct {
+		Messages []map[string]any `json:"messages"`
+	}
+
+	type content struct {
+		Text      string     `json:"-"`
+		TaskGuard *TaskGuard `json:"task_guard,omitempty"`
+	}
+
+	type taskGuard struct {
+		GuardReasoning string   `json:"guard_reasoning"`
+		GuardSafe      bool     `json:"guard_safe"`
+		GuardCategory  []string `json:"guard_category"`
+	}
+
+	type component struct {
+		Category        string            `json:"category"`
+		Description     string            `json:"description"`
+		AvailableScores map[string]string `json:"available_scores"`
+	}
+
+	type supervisorMechanics struct {
+		Task       TaskDefinition `json:"task"`
+		Components []component    `json:"components"`
+	}
+
+	type prompt struct {
+		SupervisorContext   supervisorContext   `json:"supervisor_context"`
+		SupervisorMechanics supervisorMechanics `json:"supervisor_mechanics"`
+	}
+
+	type neolangInput struct {
+		Model       string  `json:"model"`
+		MaxTokens   int     `json:"max_tokens"`
+		Temperature float64 `json:"temperature"`
+		Prompt      prompt  `json:"prompt"`
+	}
+
+	messages := make([]map[string]any, len(req.History)+1)
+
+	for idx, msg := range req.History {
+		messages[idx] = map[string]any{
+			"role":    msg.Role,
+			"content": msg.Content,
+		}
+	}
+
+	messages[len(req.History)] = map[string]any{
+		"role": ChatMessageRoleAssistant,
+		"content": map[string]any{
+			"task_guard": req.InstructTask.Task,
+		},
+	}
+
+	components := make([]component, len(categories))
+	for catName, catDetails := range categories {
+		availableScores := make(map[string]string, len(catDetails.AvailableScores))
+		for _, scoreDetails := range catDetails.AvailableScores {
+			availableScores[string(scoreDetails.Token)] = scoreDetails.Description
+		}
+
+		components = append(components, component{
+			Category:        catName,
+			Description:     catDetails.Decription,
+			AvailableScores: availableScores,
+		})
+	}
+
+	input := neolangInput{
+		Model:       req.Model,
+		MaxTokens:   req.MaxTokens,
+		Temperature: req.Temperature,
+		Prompt: prompt{
+			SupervisorContext: supervisorContext{
+				Messages: messages,
+			},
+			SupervisorMechanics: supervisorMechanics{
+				Task:       GUARD_TASK_DEFINITION,
+				Components: components,
+			},
+		},
+	}
+	return input
+}
