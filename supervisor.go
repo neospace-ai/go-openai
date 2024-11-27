@@ -1,5 +1,7 @@
 package openai
 
+import "strconv"
+
 // SupervisorRequest represents a request structure for chat completion API.
 type SupervisorRequest struct {
 	Model        string                  `json:"model"`
@@ -8,6 +10,7 @@ type SupervisorRequest struct {
 	MaxTokens    int                     `json:"max_tokens"`
 	Temperature  float64                 `json:"temperature"`
 	TopP         int                     `json:"top_p"`
+	Categories   SupervisorCategories    `json:"categories"`
 }
 
 type SupervisorResponse struct {
@@ -49,20 +52,9 @@ type SupervisorChoice struct {
 	Result       TaskSupervisor `json:"result"`
 }
 
-func (req SupervisorRequest) ToNeolangInput(categories SupervisorCategories) any {
+func (req SupervisorRequest) ToNeolangInput() any {
 	type supervisorContext struct {
 		Messages []map[string]any `json:"messages"`
-	}
-
-	type content struct {
-		Text      string     `json:"-"`
-		TaskGuard *TaskGuard `json:"task_guard,omitempty"`
-	}
-
-	type taskGuard struct {
-		GuardReasoning string   `json:"guard_reasoning"`
-		GuardSafe      bool     `json:"guard_safe"`
-		GuardCategory  []string `json:"guard_category"`
 	}
 
 	type component struct {
@@ -104,11 +96,11 @@ func (req SupervisorRequest) ToNeolangInput(categories SupervisorCategories) any
 		},
 	}
 
-	components := make([]component, len(categories))
-	for catName, catDetails := range categories {
+	components := make([]component, len(req.Categories))
+	for catName, catDetails := range req.Categories {
 		availableScores := make(map[string]string, len(catDetails.AvailableScores))
 		for _, scoreDetails := range catDetails.AvailableScores {
-			availableScores[string(scoreDetails.Token)] = scoreDetails.Description
+			availableScores[strconv.Itoa(scoreDetails.Token)] = scoreDetails.Description
 		}
 
 		components = append(components, component{
