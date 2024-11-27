@@ -396,7 +396,7 @@ func (c *Client) CreateSupervisorCompletion(
 		return
 	}
 
-	req, err := c.newRequest(ctx, http.MethodPost, c.fullURL(urlSuffix, request.Model), withBody(request))
+	req, err := c.newRequest(ctx, http.MethodPost, c.fullURL(urlSuffix, request.Model), withBody(request.ToNeolangInput()))
 	if err != nil {
 		return
 	}
