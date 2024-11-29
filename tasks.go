@@ -67,10 +67,10 @@ type SupervisorTaskScore struct {
 }
 
 type SupervisorTaskCategory struct {
-	Name            string            `json:"name"`
-	Decription      string            `json:"description"`
-	AvailableScores []SupervisorScore `json:"available_scores"`
-	Chosen          *int              `json:"chosen"`
+	Name            string                `json:"name"`
+	Decription      string                `json:"description"`
+	AvailableScores []SupervisorTaskScore `json:"available_scores"`
+	Chosen          *int                  `json:"chosen"`
 }
 
 type TaskSupervisor struct {

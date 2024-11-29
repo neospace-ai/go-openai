@@ -27,7 +27,6 @@ type SupervisorResponse struct {
 
 type SupervisorScore struct {
 	Token       int    `json:"token"`
-	Name        string `json:"name"`
 	Description string `json:"description"`
 	Value       int    `json:"value"`
 }
