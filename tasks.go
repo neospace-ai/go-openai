@@ -8,9 +8,9 @@ const (
 )
 
 type TaskGuard struct {
-	Safe            bool     `json:"safe"`
-	GuardReasoning  string   `json:"guard_reasoning"`
-	GuardCategories []string `json:"guard_categories"`
+	Safe            bool     `json:"safe" bson:"safe"`
+	GuardReasoning  string   `json:"guard_reasoning" bson:"guard_reasoning"`
+	GuardCategories []string `json:"guard_categories" bson:"guard_categories"`
 }
 
 func (t *TaskGuard) ToGeneric() GenericTask {
@@ -21,15 +21,15 @@ func (t *TaskGuard) ToGeneric() GenericTask {
 }
 
 type PotentialExpertise struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	Name        string `json:"name" bson:"name"`
+	Description string `json:"description" bson:"description"`
 }
 
 type TaskSelectExpertises struct {
-	SearchQuery           []string             `json:"search_query"`
-	PotentialExpertises   []PotentialExpertise `json:"potential_expertises"`
-	ChosenExpertises      []string             `json:"chosen_expertises"`
-	SelectExpertiseAnswer string               `json:"select_expertise_answer"`
+	SearchQuery           []string             `json:"search_query" bson:"search_query"`
+	PotentialExpertises   []PotentialExpertise `json:"potential_expertises" bson:"potential_expertises"`
+	ChosenExpertises      []string             `json:"chosen_expertises" bson:"chosen_expertises"`
+	SelectExpertiseAnswer string               `json:"select_expertise_answer" bson:"select_expertise_answer"`
 }
 
 func (t *TaskSelectExpertises) ToGeneric() GenericTask {
@@ -40,9 +40,9 @@ func (t *TaskSelectExpertises) ToGeneric() GenericTask {
 }
 
 type TaskResultCollection struct {
-	RawResponse         string                `json:"raw_response"`
-	TaskGuard           *TaskGuard            `json:"task_guard,omitempty"`
-	TaskSelectExpertise *TaskSelectExpertises `json:"task_select_expertise,omitempty"`
+	RawResponse         string                `json:"raw_response" bson:"raw_response"`
+	TaskGuard           *TaskGuard            `json:"task_guard,omitempty" bson:"task_guard,omitempty"`
+	TaskSelectExpertise *TaskSelectExpertises `json:"task_select_expertise,omitempty" bson:"task_select_expertise,omitempty"`
 }
 
 func (t *TaskResultCollection) ToGeneric() GenericTask {
@@ -57,32 +57,32 @@ func (t *TaskResultCollection) ToGeneric() GenericTask {
 
 // GenericTask is a generic task structure that can be used to represent any task.
 type GenericTask struct {
-	TaskType string `json:"task_type"`
-	Task     any    `json:"task"`
+	TaskType string `json:"task_type" bson:"task_type"`
+	Task     any    `json:"task" bson:"task"`
 }
 
 type SupervisorTaskScore struct {
-	Token       int    `json:"token"`
-	Description string `json:"description"`
+	Token       int    `json:"token" bson:"token"`
+	Description string `json:"description" bson:"description"`
 }
 
 type SupervisorTaskCategory struct {
-	Name            string                `json:"name"`
-	Decription      string                `json:"description"`
-	AvailableScores []SupervisorTaskScore `json:"available_scores"`
-	Chosen          *int                  `json:"chosen"`
+	Name            string                `json:"name" bson:"name"`
+	Decription      string                `json:"description" bson:"description"`
+	AvailableScores []SupervisorTaskScore `json:"available_scores" bson:"available_scores"`
+	Chosen          *int                  `json:"chosen" bson:"chosen"`
 }
 
 type TaskSupervisor struct {
-	RawResponse string                   `json:"raw_response"`
-	Categories  []SupervisorTaskCategory `json:"categories"`
-	Reasoning   string                   `json:"reasoning"`
-	Feedback    string                   `json:"feedback"`
+	RawResponse string                   `json:"raw_response" bson:"raw_response"`
+	Categories  []SupervisorTaskCategory `json:"categories" bson:"categories"`
+	Reasoning   string                   `json:"reasoning" bson:"reasoning"`
+	Feedback    string                   `json:"feedback" bson:"feedback"`
 }
 
 type TaskDefinition struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	Name        string `json:"name" bson:"name"`
+	Description string `json:"description" bson:"description"`
 }
 
 var GUARD_TASK_DEFINITION = TaskDefinition{
