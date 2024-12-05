@@ -35,7 +35,7 @@ type SupervisorScore struct {
 type SupervisorAvailableScores map[string]SupervisorScore
 
 type SupervisorCategory struct {
-	Decription      string                    `json:"description" bson:"description"`
+	Description     string                    `json:"description" bson:"description"`
 	AvailableScores SupervisorAvailableScores `json:"available_scores" bson:"available_scores"`
 	Threshold       int                       `json:"threshold" bson:"threshold"`
 }
@@ -104,7 +104,7 @@ func (req SupervisorRequest) ToNeolangInput() any {
 
 		components = append(components, component{
 			Category:        catName,
-			Description:     catDetails.Decription,
+			Description:     catDetails.Description,
 			AvailableScores: availableScores,
 		})
 	}

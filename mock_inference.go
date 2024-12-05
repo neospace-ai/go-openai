@@ -179,7 +179,7 @@ func getBestFromCategories(categories SupervisorCategories) []SupervisorTaskCate
 		chosenTok := cat.AvailableScores[maxScoreName].Token
 		result[idx] = SupervisorTaskCategory{
 			Name:            name,
-			Decription:      cat.Decription,
+			Description:     cat.Description,
 			AvailableScores: scores,
 			Chosen:          &chosenTok,
 		}
@@ -206,7 +206,7 @@ func getWorstFromCategories(categories SupervisorCategories) []SupervisorTaskCat
 		chosenTok := cat.AvailableScores[maxScoreName].Token
 		result[idx] = SupervisorTaskCategory{
 			Name:            name,
-			Decription:      cat.Decription,
+			Description:     cat.Description,
 			AvailableScores: scores,
 			Chosen:          &chosenTok,
 		}
@@ -229,7 +229,7 @@ func getRandomFromCategories(categories SupervisorCategories) []SupervisorTaskCa
 		chosenTok := scores[rand.Int()%len(scores)].Token
 		result[idx] = SupervisorTaskCategory{
 			Name:            name,
-			Decription:      cat.Decription,
+			Description:     cat.Description,
 			AvailableScores: scores,
 			Chosen:          &chosenTok,
 		}
