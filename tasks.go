@@ -8,7 +8,7 @@ const (
 )
 
 type TaskGuard struct {
-	Safe            bool     `json:"safe" bson:"safe"`
+	Safe            bool     `json:"guard_safe" bson:"guard_safe"`
 	GuardReasoning  string   `json:"guard_reasoning" bson:"guard_reasoning"`
 	GuardCategories []string `json:"guard_categories" bson:"guard_categories"`
 }
