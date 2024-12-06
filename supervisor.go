@@ -1,6 +1,11 @@
 package openai
 
-import "strconv"
+import (
+	"encoding/json"
+	"fmt"
+	"reflect"
+	"strconv"
+)
 
 // SupervisorRequest represents a request structure for chat completion API.
 type SupervisorRequest struct {
@@ -76,7 +81,7 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		Model       string  `json:"model" bson:"model"`
 		MaxTokens   int     `json:"max_tokens" bson:"max_tokens"`
 		Temperature float64 `json:"temperature" bson:"temperature"`
-		Prompt      prompt  `json:"prompt" bson:"prompt"`
+		Prompt      string  `json:"prompt" bson:"prompt"`
 	}
 
 	messages := make([]map[string]any, len(req.History)+1)
@@ -88,10 +93,17 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		}
 	}
 
+	var task any
+	task = req.InstructTask.Task
+
+	if reflect.TypeOf(req.InstructTask.Task).Kind() == reflect.Ptr || reflect.TypeOf(req.InstructTask.Task).Kind() == reflect.Interface {
+		task = reflect.ValueOf(req.InstructTask.Task).Elem().Interface()
+	}
+
 	messages[len(req.History)] = map[string]any{
 		"role": ChatMessageRoleAssistant,
 		"content": map[string]any{
-			"task_guard": req.InstructTask.Task,
+			"task_guard": task,
 		},
 	}
 
@@ -109,19 +121,24 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		})
 	}
 
+	promptStr, err := json.Marshal(prompt{
+		SupervisorContext: supervisorContext{
+			Messages: messages,
+		},
+		SupervisorMechanics: supervisorMechanics{
+			Task:       GUARD_TASK_DEFINITION,
+			Components: components,
+		},
+	})
+	if err != nil {
+		panic(fmt.Sprintf("failed to marshal prompt: %v", err))
+	}
+
 	input := neolangInput{
 		Model:       req.Model,
 		MaxTokens:   req.MaxTokens,
 		Temperature: req.Temperature,
-		Prompt: prompt{
-			SupervisorContext: supervisorContext{
-				Messages: messages,
-			},
-			SupervisorMechanics: supervisorMechanics{
-				Task:       GUARD_TASK_DEFINITION,
-				Components: components,
-			},
-		},
+		Prompt:      string(promptStr),
 	}
 	return input
 }
