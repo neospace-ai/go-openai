@@ -95,7 +95,7 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		},
 	}
 
-	components := make([]component, len(req.Categories))
+	components := make([]component, 0)
 	for catName, catDetails := range req.Categories {
 		availableScores := make(map[string]string, len(catDetails.AvailableScores))
 		for _, scoreDetails := range catDetails.AvailableScores {
