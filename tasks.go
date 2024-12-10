@@ -3,8 +3,8 @@ package openai
 const DEFAULT_EXPERTISE = "discovering"
 
 const (
-	TASK_TYPE_GUARD             = "GUARD"
-	TASK_TYPE_SELECT_EXPERTISES = "SELECT_EXPERTISES"
+	TASK_TYPE_GUARD             = "task_guard"
+	TASK_TYPE_SELECT_EXPERTISES = "task_select_expertises"
 )
 
 type TaskGuard struct {
