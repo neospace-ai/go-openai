@@ -90,7 +90,7 @@ var GUARD_TASK_DEFINITION = TaskDefinition{
 	Name:        "task_guard",
 	Description: "A task Guard têm como objetivo analisar e assegurar a segurança de mensagens de usuários e classificá-las em categorias de risco de modo que siga princípios éticos, morais e legais.",
 	FieldTypes: map[string]string{
-		"safe":             "bool",
+		"guard_safe":       "bool",
 		"guard_reasoning":  "str",
 		"guard_categories": "List[str]",
 	},
