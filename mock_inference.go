@@ -123,14 +123,14 @@ func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervi
 	var supervisorFeedback string
 	switch mockOption {
 	case TEST_SUPERVISOR_SELECT_BEST:
-		taskCat = getBestFromComponents(request.Categories)
+		taskCat = getBestFromComponents(request.Components)
 		supervisorReasoning = "I am a mock that thinks the mock did a nice job"
 	case TEST_SUPERVISOR_SELECT_WORST:
-		taskCat = getWorstFromComponents(request.Categories)
+		taskCat = getWorstFromComponents(request.Components)
 		supervisorReasoning = "I am a mock that thinks the mock did a very bad job"
 		supervisorFeedback = "The instruct should be better"
 	case TEST_SUPERVISOR_SELECT_RANDOM:
-		taskCat = getRandomFromComponents(request.Categories)
+		taskCat = getRandomFromComponents(request.Components)
 		supervisorReasoning = "I am mock and i dont know what i think"
 		supervisorFeedback = "I cant give feedback, i dont know what i am doing"
 	}

@@ -15,7 +15,7 @@ type SupervisorRequest struct {
 	MaxTokens    int                     `json:"max_tokens" bson:"max_tokens"`
 	Temperature  float64                 `json:"temperature" bson:"temperature"`
 	TopP         int                     `json:"top_p" bson:"top_p"`
-	Categories   SupervisorComponents    `json:"categories" bson:"categories"`
+	Components   SupervisorComponents    `json:"components" bson:"components"`
 }
 
 type SupervisorResponse struct {
@@ -108,7 +108,7 @@ func (req SupervisorRequest) ToNeolangInput() any {
 	}
 
 	components := make([]component, 0)
-	for catName, catDetails := range req.Categories {
+	for catName, catDetails := range req.Components {
 		availableScores := make(map[string]string, len(catDetails.AvailableScores))
 		for _, scoreDetails := range catDetails.AvailableScores {
 			availableScores[strconv.Itoa(scoreDetails.Token)] = scoreDetails.Description
