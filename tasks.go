@@ -8,9 +8,9 @@ const (
 )
 
 type TaskGuard struct {
-	GuardSafe       bool     `json:"guard_safe" bson:"guard_safe"`
-	GuardReasoning  string   `json:"guard_reasoning" bson:"guard_reasoning"`
-	GuardCategories []string `json:"guard_categories" bson:"guard_categories"`
+	GuardSafe      bool     `json:"guard_safe" bson:"guard_safe"`
+	GuardReasoning string   `json:"guard_reasoning" bson:"guard_reasoning"`
+	GuardCategory  []string `json:"guard_category" bson:"guard_category"`
 }
 
 func (t *TaskGuard) ToGeneric() GenericTask {
@@ -92,8 +92,8 @@ var GUARD_TASK_DEFINITION = TaskDefinition{
 	Name:        "task_guard",
 	Description: "A task Guard têm como objetivo analisar e assegurar a segurança de mensagens de usuários e classificá-las em categorias de risco de modo que siga princípios éticos, morais e legais.",
 	FieldTypes: map[string]string{
-		"guard_safe":       "bool",
-		"guard_reasoning":  "str",
-		"guard_categories": "List[str]",
+		"guard_safe":      "bool",
+		"guard_reasoning": "str",
+		"guard_category":  "List[str]",
 	},
 }
