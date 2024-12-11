@@ -118,19 +118,19 @@ func (c *Client) MockSupervisorCompletion(
 }
 
 func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervisorOptions) SupervisorResponse {
-	var taskCat []SupervisorTaskCategory
+	var taskCat []SupervisorTaskComponent
 	var supervisorReasoning string
 	var supervisorFeedback string
 	switch mockOption {
 	case TEST_SUPERVISOR_SELECT_BEST:
-		taskCat = getBestFromCategories(request.Categories)
+		taskCat = getBestFromComponents(request.Categories)
 		supervisorReasoning = "I am a mock that thinks the mock did a nice job"
 	case TEST_SUPERVISOR_SELECT_WORST:
-		taskCat = getWorstFromCategories(request.Categories)
+		taskCat = getWorstFromComponents(request.Categories)
 		supervisorReasoning = "I am a mock that thinks the mock did a very bad job"
 		supervisorFeedback = "The instruct should be better"
 	case TEST_SUPERVISOR_SELECT_RANDOM:
-		taskCat = getRandomFromCategories(request.Categories)
+		taskCat = getRandomFromComponents(request.Categories)
 		supervisorReasoning = "I am mock and i dont know what i think"
 		supervisorFeedback = "I cant give feedback, i dont know what i am doing"
 	}
@@ -145,10 +145,10 @@ func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervi
 				TaskName:     request.InstructTask.TaskType,
 				InstructTask: request.InstructTask.Task,
 				Result: TaskSupervisor{
-					RawResponse: "<|mocked_response|> supervisor mock <|eot|>",
-					Reasoning:   supervisorReasoning,
-					Feedback:    supervisorFeedback,
-					Categories:  taskCat,
+					RawResponse:         "<|mocked_response|> supervisor mock <|eot|>",
+					SupervisorReasoning: supervisorReasoning,
+					Feedback:            supervisorFeedback,
+					Components:          taskCat,
 				},
 			},
 		},
@@ -161,8 +161,8 @@ func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervi
 	}
 }
 
-func getBestFromCategories(categories SupervisorCategories) []SupervisorTaskCategory {
-	result := make([]SupervisorTaskCategory, len(categories))
+func getBestFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
+	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
 	for name, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
@@ -177,7 +177,7 @@ func getBestFromCategories(categories SupervisorCategories) []SupervisorTaskCate
 			}
 		}
 		chosenTok := cat.AvailableScores[maxScoreName].Token
-		result[idx] = SupervisorTaskCategory{
+		result[idx] = SupervisorTaskComponent{
 			Name:            name,
 			Description:     cat.Description,
 			AvailableScores: scores,
@@ -188,8 +188,8 @@ func getBestFromCategories(categories SupervisorCategories) []SupervisorTaskCate
 	return result
 }
 
-func getWorstFromCategories(categories SupervisorCategories) []SupervisorTaskCategory {
-	result := make([]SupervisorTaskCategory, len(categories))
+func getWorstFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
+	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
 	for name, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
@@ -204,7 +204,7 @@ func getWorstFromCategories(categories SupervisorCategories) []SupervisorTaskCat
 			}
 		}
 		chosenTok := cat.AvailableScores[maxScoreName].Token
-		result[idx] = SupervisorTaskCategory{
+		result[idx] = SupervisorTaskComponent{
 			Name:            name,
 			Description:     cat.Description,
 			AvailableScores: scores,
@@ -215,8 +215,8 @@ func getWorstFromCategories(categories SupervisorCategories) []SupervisorTaskCat
 	return result
 }
 
-func getRandomFromCategories(categories SupervisorCategories) []SupervisorTaskCategory {
-	result := make([]SupervisorTaskCategory, len(categories))
+func getRandomFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
+	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
 	for name, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
@@ -227,7 +227,7 @@ func getRandomFromCategories(categories SupervisorCategories) []SupervisorTaskCa
 			})
 		}
 		chosenTok := scores[rand.Int()%len(scores)].Token
-		result[idx] = SupervisorTaskCategory{
+		result[idx] = SupervisorTaskComponent{
 			Name:            name,
 			Description:     cat.Description,
 			AvailableScores: scores,

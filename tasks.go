@@ -63,10 +63,11 @@ type GenericTask struct {
 
 type SupervisorTaskScore struct {
 	Token       int    `json:"token" bson:"token"`
+	TokenName   string `json:"token_name" bson:"token_name"`
 	Description string `json:"description" bson:"description"`
 }
 
-type SupervisorTaskCategory struct {
+type SupervisorTaskComponent struct {
 	Name            string                `json:"name" bson:"name"`
 	Description     string                `json:"description" bson:"description"`
 	AvailableScores []SupervisorTaskScore `json:"available_scores" bson:"available_scores"`
@@ -74,10 +75,11 @@ type SupervisorTaskCategory struct {
 }
 
 type TaskSupervisor struct {
-	RawResponse string                   `json:"raw_response" bson:"raw_response"`
-	Categories  []SupervisorTaskCategory `json:"categories" bson:"categories"`
-	Reasoning   string                   `json:"reasoning" bson:"reasoning"`
-	Feedback    string                   `json:"feedback" bson:"feedback"`
+	RawResponse         string                    `json:"raw_response" bson:"raw_response"`
+	Components          []SupervisorTaskComponent `json:"components" bson:"components"`
+	SupervisorReasoning string                    `json:"supervisor_reasoning" bson:"supervisor_reasoning"`
+	Feedback            string                    `json:"feedback" bson:"feedback"`
+	Score               map[string]string         `json:"score" bson:"score"` //{ComponentName: TokenName}
 }
 
 type TaskDefinition struct {
