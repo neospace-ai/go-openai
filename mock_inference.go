@@ -48,9 +48,9 @@ func getChatCompletionResponseMock(request ChatCompletionRequest, mockOption Moc
 	switch mockOption {
 	case TEST_GUARD_UNSAFE:
 		guard = &TaskGuard{
-			GuardSafe:       false,
-			GuardReasoning:  "User is trying to test a guard activation implementation function, i should help him",
-			GuardCategories: []string{"Racism", "Bullying", "Other"},
+			GuardSafe:      false,
+			GuardReasoning: "User is trying to test a guard activation implementation function, i should help him",
+			GuardCategory:  []string{"Racism", "Bullying", "Other"},
 		}
 	case TEST_GUARD_SAFE:
 		guard = &TaskGuard{
