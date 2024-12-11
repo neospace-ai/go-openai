@@ -27,7 +27,7 @@ type SupervisorResponse struct {
 	Usage             Usage              `json:"usage" bson:"usage"`
 	SystemFingerprint string             `json:"system_fingerprint" bson:"system_fingerprint"`
 
-	httpHeader
+	httpHeader `json:"-" bson:"-"`
 }
 
 type SupervisorScore struct {
