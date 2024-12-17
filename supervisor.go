@@ -14,7 +14,6 @@ type SupervisorRequest struct {
 	MaxTokens    int                     `json:"max_tokens" bson:"max_tokens"`
 	Temperature  float64                 `json:"temperature" bson:"temperature"`
 	TopP         int                     `json:"top_p" bson:"top_p"`
-	Components   SupervisorComponents    `json:"components" bson:"components"`
 }
 
 type SupervisorResponse struct {
@@ -28,24 +27,6 @@ type SupervisorResponse struct {
 
 	httpHeader `json:"-" bson:"-"`
 }
-
-type SupervisorScore struct {
-	Token       int    `json:"token" bson:"token"`
-	Description string `json:"description" bson:"description"`
-	Value       int    `json:"value" bson:"value"`
-}
-
-// Map in format: {Name: Details}
-type SupervisorAvailableScores map[string]SupervisorScore
-
-type SupervisorComponent struct {
-	Description     string                    `json:"description" bson:"description"`
-	AvailableScores SupervisorAvailableScores `json:"available_scores" bson:"available_scores"`
-	Threshold       int                       `json:"threshold" bson:"threshold"`
-}
-
-// Map in format: {Name: Details}
-type SupervisorComponents map[string]SupervisorComponent
 
 type SupervisorChoice struct {
 	Index        int            `json:"index" bson:"index"`
