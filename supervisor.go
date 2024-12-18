@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
-	"strconv"
 )
 
 // SupervisorRequest represents a request structure for chat completion API.
@@ -61,20 +60,8 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		Messages []map[string]any `json:"messages" bson:"messages"`
 	}
 
-	type component struct {
-		Category        string            `json:"category" bson:"category"`
-		Description     string            `json:"description" bson:"description"`
-		AvailableScores map[string]string `json:"available_scores" bson:"available_scores"`
-	}
-
-	type supervisorMechanics struct {
-		Task       TaskDefinition `json:"task" bson:"task"`
-		Components []component    `json:"components" bson:"components"`
-	}
-
 	type prompt struct {
-		SupervisorContext   supervisorContext   `json:"supervisor_context" bson:"supervisor_context"`
-		SupervisorMechanics supervisorMechanics `json:"supervisor_mechanics" bson:"supervisor_mechanics"`
+		SupervisorContext supervisorContext `json:"supervisor_context" bson:"supervisor_context"`
 	}
 
 	type neolangInput struct {
@@ -107,27 +94,9 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		},
 	}
 
-	components := make([]component, 0)
-	for catName, catDetails := range req.Components {
-		availableScores := make(map[string]string, len(catDetails.AvailableScores))
-		for _, scoreDetails := range catDetails.AvailableScores {
-			availableScores[strconv.Itoa(scoreDetails.Token)] = scoreDetails.Description
-		}
-
-		components = append(components, component{
-			Category:        catName,
-			Description:     catDetails.Description,
-			AvailableScores: availableScores,
-		})
-	}
-
 	promptStr, err := json.Marshal(prompt{
 		SupervisorContext: supervisorContext{
 			Messages: messages,
-		},
-		SupervisorMechanics: supervisorMechanics{
-			Task:       GUARD_TASK_DEFINITION,
-			Components: components,
 		},
 	})
 	if err != nil {
