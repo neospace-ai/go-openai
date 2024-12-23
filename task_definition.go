@@ -13,8 +13,8 @@ type TaskComponent struct {
 }
 
 type SupervisorProfile struct {
-	Description string                         `json:"description" bson:"description"`
-	Components  map[string]SupervisorComponent `json:"components" bson:"components"`
+	Description string               `json:"description" bson:"description"`
+	Components  SupervisorComponents `json:"components" bson:"components"`
 }
 
 type SupervisorComponents map[string]SupervisorComponent // ComponentName: ComponentDetails
