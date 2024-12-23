@@ -41,12 +41,6 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		Messages []map[string]any `json:"messages" bson:"messages"`
 	}
 
-	type component struct {
-		Category        string            `json:"category" bson:"category"`
-		Description     string            `json:"description" bson:"description"`
-		AvailableScores map[string]string `json:"available_scores" bson:"available_scores"`
-	}
-
 	type prompt struct {
 		SupervisorContext supervisorContext `json:"supervisor_context" bson:"supervisor_context"`
 	}

@@ -7,10 +7,17 @@ const (
 	TASK_TYPE_SELECT_EXPERTISES = "task_select_expertises"
 )
 
+type CategorySuggestions struct {
+	MacroCategory string `json:"macro_category" bson:"macro_category"`
+	SubCategory   string `json:"sub_category" bson:"sub_category"`
+	Justification string `json:"justification" bson:"justification"`
+}
+
 type TaskGuard struct {
-	GuardSafe      bool     `json:"guard_safe" bson:"guard_safe"`
-	GuardReasoning string   `json:"guard_reasoning" bson:"guard_reasoning"`
-	GuardCategory  []string `json:"guard_category" bson:"guard_category"`
+	GuardSafe           bool                `json:"guard_safe" bson:"guard_safe"`
+	GuardReasoning      string              `json:"guard_reasoning" bson:"guard_reasoning"`
+	GuardCategory       []string            `json:"guard_category" bson:"guard_category"`
+	CategorySuggestions CategorySuggestions `json:"category_suggestions" bson:"category_suggestions"`
 }
 
 func (t *TaskGuard) ToGeneric() GenericTask {
