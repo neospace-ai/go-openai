@@ -14,6 +14,7 @@ type SupervisorRequest struct {
 	MaxTokens    int                     `json:"max_tokens" bson:"max_tokens"`
 	Temperature  float64                 `json:"temperature" bson:"temperature"`
 	TopP         int                     `json:"top_p" bson:"top_p"`
+	Task         Task                    `json:"task" bson:"task"`
 }
 
 type SupervisorResponse struct {
@@ -36,21 +37,66 @@ type SupervisorChoice struct {
 	Result       TaskSupervisor `json:"result" bson:"result"`
 }
 
+type supervisorContext struct {
+	Messages []map[string]any `json:"messages" bson:"messages"`
+}
+
+type supervisorTask struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type supervisorComponent struct {
+	Category        string            `json:"category"`
+	Description     string            `json:"description"`
+	AvailableScores map[string]string `json:"available_scores"`
+}
+type supervisorComponents = []supervisorComponent
+
+type supervisorMechanics struct {
+	Task       supervisorTask       `json:"task"`
+	Components supervisorComponents `json:"components"`
+}
+
+type prompt struct {
+	SupervisorContext   supervisorContext   `json:"supervisor_context" bson:"supervisor_context"`
+	SupervisorMechanics supervisorMechanics `json:"supervisor_mechanics" bson:"supervisor_mechanics"`
+}
+
+type neolangInput struct {
+	Model       string  `json:"model" bson:"model"`
+	MaxTokens   int     `json:"max_tokens" bson:"max_tokens"`
+	Temperature float64 `json:"temperature" bson:"temperature"`
+	Prompt      string  `json:"prompt" bson:"prompt"`
+}
+
+func TransformTaskToSupervisorMechanics(task Task) supervisorMechanics {
+	// Initialize components
+	var components []supervisorComponent
+	for compName, compDetails := range task.SupervisorProfile.Components {
+		availableScores := make(map[string]string)
+		for token, scoreDetails := range compDetails.Scores {
+			availableScores[token] = scoreDetails.Description
+		}
+		components = append(components, supervisorComponent{
+			Category:        compName,
+			Description:     compDetails.Description,
+			AvailableScores: availableScores,
+		})
+	}
+
+	supervisorMechanics := supervisorMechanics{
+		Task: supervisorTask{
+			Name:        task.Name,
+			Description: task.Description,
+		},
+		Components: components,
+	}
+
+	return supervisorMechanics
+}
+
 func (req SupervisorRequest) ToNeolangInput() any {
-	type supervisorContext struct {
-		Messages []map[string]any `json:"messages" bson:"messages"`
-	}
-
-	type prompt struct {
-		SupervisorContext supervisorContext `json:"supervisor_context" bson:"supervisor_context"`
-	}
-
-	type neolangInput struct {
-		Model       string  `json:"model" bson:"model"`
-		MaxTokens   int     `json:"max_tokens" bson:"max_tokens"`
-		Temperature float64 `json:"temperature" bson:"temperature"`
-		Prompt      string  `json:"prompt" bson:"prompt"`
-	}
 
 	messages := make([]map[string]any, len(req.History)+1)
 
@@ -79,6 +125,7 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		SupervisorContext: supervisorContext{
 			Messages: messages,
 		},
+		SupervisorMechanics: TransformTaskToSupervisorMechanics(req.Task),
 	})
 	if err != nil {
 		panic(fmt.Sprintf("failed to marshal prompt: %v", err))
