@@ -73,13 +73,13 @@ type neolangInput struct {
 func TransformTaskToSupervisorMechanics(task Task) supervisorMechanics {
 	// Initialize components
 	var components []supervisorComponent
-	for compName, compDetails := range task.SupervisorProfile.Components {
+	for _, compDetails := range task.SupervisorProfile.Components {
 		availableScores := make(map[string]string)
 		for token, scoreDetails := range compDetails.Scores {
 			availableScores[token] = scoreDetails.Description
 		}
 		components = append(components, supervisorComponent{
-			Category:        compName,
+			Category:        compDetails.Name,
 			Description:     compDetails.Description,
 			AvailableScores: availableScores,
 		})

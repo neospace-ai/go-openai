@@ -18,9 +18,10 @@ type SupervisorProfile struct {
 	Components  SupervisorComponents `json:"components" bson:"components"`
 }
 
-type SupervisorComponents map[string]SupervisorComponent // ComponentName: ComponentDetails
+type SupervisorComponents []SupervisorComponent // ComponentName: ComponentDetails
 
 type SupervisorComponent struct {
+	Name        string           `json:"name"`
 	Description string           `json:"description"`
 	Scores      SupervisorScores `json:"scores"`
 	Type        string           `json:"type"`
