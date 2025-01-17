@@ -100,6 +100,7 @@ func (c *Client) MockSupervisorCompletion(
 	ctx context.Context,
 	request SupervisorRequest,
 	mockOptions MockSupervisorOptions,
+	components SupervisorComponents,
 ) (response SupervisorResponse, err error) {
 	urlSuffix := supervisorSuffix
 	if !checkEndpointSupportsModel(urlSuffix, request.Model) {
@@ -114,23 +115,23 @@ func (c *Client) MockSupervisorCompletion(
 
 	print(fmt.Sprintf("Request sent to openai via supervisor mock: %+v", req))
 
-	return getSupervisorResponseMock(request, mockOptions), nil
+	return getSupervisorResponseMock(request, mockOptions, components), nil
 }
 
-func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervisorOptions) SupervisorResponse {
-	var taskCat []SupervisorTaskComponent
+func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervisorOptions, components SupervisorComponents) SupervisorResponse {
+	var taskComps []SupervisorTaskComponent
 	var supervisorReasoning string
 	var supervisorFeedback string
 	switch mockOption {
 	case TEST_SUPERVISOR_SELECT_BEST:
-		taskCat = getBestFromComponents(request.Components)
+		taskComps = getBestFromComponents(components)
 		supervisorReasoning = "I am a mock that thinks the mock did a nice job"
 	case TEST_SUPERVISOR_SELECT_WORST:
-		taskCat = getWorstFromComponents(request.Components)
+		taskComps = getWorstFromComponents(components)
 		supervisorReasoning = "I am a mock that thinks the mock did a very bad job"
 		supervisorFeedback = "The instruct should be better"
 	case TEST_SUPERVISOR_SELECT_RANDOM:
-		taskCat = getRandomFromComponents(request.Components)
+		taskComps = getRandomFromComponents(components)
 		supervisorReasoning = "I am mock and i dont know what i think"
 		supervisorFeedback = "I cant give feedback, i dont know what i am doing"
 	}
@@ -148,7 +149,7 @@ func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervi
 					RawResponse:         "<|mocked_response|> supervisor mock <|eot|>",
 					SupervisorReasoning: supervisorReasoning,
 					Feedback:            supervisorFeedback,
-					Components:          taskCat,
+					Components:          taskComps,
 				},
 			},
 		},
@@ -164,24 +165,25 @@ func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervi
 func getBestFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
 	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
-	for name, cat := range categories {
+	for _, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
 		maxScoreName := ""
-		for scoreName, score := range cat.AvailableScores {
+		for scoreName, score := range cat.Scores {
 			scores = append(scores, SupervisorTaskScore{
-				Token:       score.Token,
+				Token:       0, // Legacy, not being used
+				TokenName:   scoreName,
 				Description: score.Description,
 			})
-			if maxScoreName == "" || score.Value > cat.AvailableScores[maxScoreName].Value {
+			if maxScoreName == "" || score.Weight > cat.Scores[maxScoreName].Weight {
 				maxScoreName = scoreName
 			}
 		}
-		chosenTok := cat.AvailableScores[maxScoreName].Token
 		result[idx] = SupervisorTaskComponent{
-			Name:            name,
+			Name:            cat.Name,
 			Description:     cat.Description,
 			AvailableScores: scores,
-			Chosen:          &chosenTok,
+			Chosen:          nil,
+			ChosenName:      &maxScoreName,
 		}
 		idx++
 	}
@@ -191,24 +193,25 @@ func getBestFromComponents(categories SupervisorComponents) []SupervisorTaskComp
 func getWorstFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
 	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
-	for name, cat := range categories {
+	for _, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
-		maxScoreName := ""
-		for scoreName, score := range cat.AvailableScores {
+		minScoreName := ""
+		for scoreName, score := range cat.Scores {
 			scores = append(scores, SupervisorTaskScore{
-				Token:       score.Token,
+				Token:       0, // Legacy, not being used
+				TokenName:   scoreName,
 				Description: score.Description,
 			})
-			if maxScoreName == "" || score.Value < cat.AvailableScores[maxScoreName].Value {
-				maxScoreName = scoreName
+			if minScoreName == "" || score.Weight < cat.Scores[minScoreName].Weight {
+				minScoreName = scoreName
 			}
 		}
-		chosenTok := cat.AvailableScores[maxScoreName].Token
 		result[idx] = SupervisorTaskComponent{
-			Name:            name,
+			Name:            cat.Name,
 			Description:     cat.Description,
 			AvailableScores: scores,
-			Chosen:          &chosenTok,
+			Chosen:          nil,
+			ChosenName:      &minScoreName,
 		}
 		idx++
 	}
@@ -218,20 +221,23 @@ func getWorstFromComponents(categories SupervisorComponents) []SupervisorTaskCom
 func getRandomFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
 	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
-	for name, cat := range categories {
+	for _, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
-		for _, score := range cat.AvailableScores {
+		for scoreName, score := range cat.Scores {
 			scores = append(scores, SupervisorTaskScore{
-				Token:       score.Token,
+				Token:       0, // Legacy, not being used
+				TokenName:   scoreName,
 				Description: score.Description,
 			})
 		}
-		chosenTok := scores[rand.Int()%len(scores)].Token
+
+		minScoreName := scores[rand.Int()%len(scores)].TokenName
 		result[idx] = SupervisorTaskComponent{
-			Name:            name,
+			Name:            cat.Name,
 			Description:     cat.Description,
 			AvailableScores: scores,
-			Chosen:          &chosenTok,
+			Chosen:          nil,
+			ChosenName:      &minScoreName,
 		}
 		idx++
 	}

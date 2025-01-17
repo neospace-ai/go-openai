@@ -401,5 +401,7 @@ func (c *Client) CreateSupervisorCompletion(
 	}
 
 	err = c.sendRequest(req, &response)
+
+	setChosenName(&response)
 	return
 }

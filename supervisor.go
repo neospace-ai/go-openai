@@ -14,7 +14,7 @@ type SupervisorRequest struct {
 	MaxTokens    int                     `json:"max_tokens" bson:"max_tokens"`
 	Temperature  float64                 `json:"temperature" bson:"temperature"`
 	TopP         int                     `json:"top_p" bson:"top_p"`
-	Components   SupervisorComponents    `json:"components" bson:"components"`
+	Task         Task                    `json:"-" bson:"-"`
 }
 
 type SupervisorResponse struct {
@@ -29,24 +29,6 @@ type SupervisorResponse struct {
 	httpHeader `json:"-" bson:"-"`
 }
 
-type SupervisorScore struct {
-	Token       int    `json:"token" bson:"token"`
-	Description string `json:"description" bson:"description"`
-	Value       int    `json:"value" bson:"value"`
-}
-
-// Map in format: {Name: Details}
-type SupervisorAvailableScores map[string]SupervisorScore
-
-type SupervisorComponent struct {
-	Description     string                    `json:"description" bson:"description"`
-	AvailableScores SupervisorAvailableScores `json:"available_scores" bson:"available_scores"`
-	Threshold       int                       `json:"threshold" bson:"threshold"`
-}
-
-// Map in format: {Name: Details}
-type SupervisorComponents map[string]SupervisorComponent
-
 type SupervisorChoice struct {
 	Index        int            `json:"index" bson:"index"`
 	LogProbs     *LogProbs      `json:"logprobs,omitempty" bson:"logprobs,omitempty"`
@@ -55,21 +37,66 @@ type SupervisorChoice struct {
 	Result       TaskSupervisor `json:"result" bson:"result"`
 }
 
+type supervisorContext struct {
+	Messages []map[string]any `json:"messages" bson:"messages"`
+}
+
+type supervisorTask struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type supervisorComponent struct {
+	Category        string            `json:"category"`
+	Description     string            `json:"description"`
+	AvailableScores map[string]string `json:"available_scores"`
+}
+type supervisorComponents = []supervisorComponent
+
+type supervisorMechanics struct {
+	Task       supervisorTask       `json:"task"`
+	Components supervisorComponents `json:"components"`
+}
+
+type prompt struct {
+	SupervisorContext   supervisorContext   `json:"supervisor_context" bson:"supervisor_context"`
+	SupervisorMechanics supervisorMechanics `json:"supervisor_mechanics" bson:"supervisor_mechanics"`
+}
+
+type neolangInput struct {
+	Model       string  `json:"model" bson:"model"`
+	MaxTokens   int     `json:"max_tokens" bson:"max_tokens"`
+	Temperature float64 `json:"temperature" bson:"temperature"`
+	Prompt      string  `json:"prompt" bson:"prompt"`
+}
+
+func TransformTaskToSupervisorMechanics(task Task) supervisorMechanics {
+	// Initialize components
+	var components []supervisorComponent
+	for _, compDetails := range task.SupervisorProfile.Components {
+		availableScores := make(map[string]string)
+		for token, scoreDetails := range compDetails.Scores {
+			availableScores[token] = scoreDetails.Description
+		}
+		components = append(components, supervisorComponent{
+			Category:        compDetails.Name,
+			Description:     compDetails.Description,
+			AvailableScores: availableScores,
+		})
+	}
+
+	supervisorMechanics := supervisorMechanics{
+		Task: supervisorTask{
+			Name:        task.Name,
+			Description: task.Description,
+		},
+		Components: components,
+	}
+
+	return supervisorMechanics
+}
+
 func (req SupervisorRequest) ToNeolangInput() any {
-	type supervisorContext struct {
-		Messages []map[string]any `json:"messages" bson:"messages"`
-	}
-
-	type prompt struct {
-		SupervisorContext supervisorContext `json:"supervisor_context" bson:"supervisor_context"`
-	}
-
-	type neolangInput struct {
-		Model       string  `json:"model" bson:"model"`
-		MaxTokens   int     `json:"max_tokens" bson:"max_tokens"`
-		Temperature float64 `json:"temperature" bson:"temperature"`
-		Prompt      string  `json:"prompt" bson:"prompt"`
-	}
 
 	messages := make([]map[string]any, len(req.History)+1)
 
@@ -98,6 +125,7 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		SupervisorContext: supervisorContext{
 			Messages: messages,
 		},
+		SupervisorMechanics: TransformTaskToSupervisorMechanics(req.Task),
 	})
 	if err != nil {
 		panic(fmt.Sprintf("failed to marshal prompt: %v", err))
@@ -110,4 +138,18 @@ func (req SupervisorRequest) ToNeolangInput() any {
 		Prompt:      string(promptStr),
 	}
 	return input
+}
+
+func setChosenName(response *SupervisorResponse) {
+	for idx, choice := range response.Choices {
+		for compIdx, comp := range choice.Result.Components {
+			if comp.Chosen != nil {
+				for _, score := range comp.AvailableScores {
+					if score.Token == *comp.Chosen {
+						response.Choices[idx].Result.Components[compIdx].ChosenName = &score.TokenName
+					}
+				}
+			}
+		}
+	}
 }
