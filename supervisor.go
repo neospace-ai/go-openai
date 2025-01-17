@@ -139,3 +139,17 @@ func (req SupervisorRequest) ToNeolangInput() any {
 	}
 	return input
 }
+
+func setChosenName(response *SupervisorResponse) {
+	for idx, choice := range response.Choices {
+		for compIdx, comp := range choice.Result.Components {
+			if comp.Chosen != nil {
+				for _, score := range comp.AvailableScores {
+					if score.Token == *comp.Chosen {
+						response.Choices[idx].Result.Components[compIdx].ChosenName = &score.TokenName
+					}
+				}
+			}
+		}
+	}
+}
