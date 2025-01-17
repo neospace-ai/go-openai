@@ -165,7 +165,7 @@ func getSupervisorResponseMock(request SupervisorRequest, mockOption MockSupervi
 func getBestFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
 	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
-	for name, cat := range categories {
+	for _, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
 		maxScoreName := ""
 		for scoreName, score := range cat.Scores {
@@ -179,7 +179,7 @@ func getBestFromComponents(categories SupervisorComponents) []SupervisorTaskComp
 			}
 		}
 		result[idx] = SupervisorTaskComponent{
-			Name:            name,
+			Name:            cat.Name,
 			Description:     cat.Description,
 			AvailableScores: scores,
 			Chosen:          nil,
@@ -193,7 +193,7 @@ func getBestFromComponents(categories SupervisorComponents) []SupervisorTaskComp
 func getWorstFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
 	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
-	for name, cat := range categories {
+	for _, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
 		minScoreName := ""
 		for scoreName, score := range cat.Scores {
@@ -207,7 +207,7 @@ func getWorstFromComponents(categories SupervisorComponents) []SupervisorTaskCom
 			}
 		}
 		result[idx] = SupervisorTaskComponent{
-			Name:            name,
+			Name:            cat.Name,
 			Description:     cat.Description,
 			AvailableScores: scores,
 			Chosen:          nil,
@@ -221,7 +221,7 @@ func getWorstFromComponents(categories SupervisorComponents) []SupervisorTaskCom
 func getRandomFromComponents(categories SupervisorComponents) []SupervisorTaskComponent {
 	result := make([]SupervisorTaskComponent, len(categories))
 	idx := 0
-	for name, cat := range categories {
+	for _, cat := range categories {
 		scores := make([]SupervisorTaskScore, 0)
 		for scoreName, score := range cat.Scores {
 			scores = append(scores, SupervisorTaskScore{
@@ -233,7 +233,7 @@ func getRandomFromComponents(categories SupervisorComponents) []SupervisorTaskCo
 
 		minScoreName := scores[rand.Int()%len(scores)].TokenName
 		result[idx] = SupervisorTaskComponent{
-			Name:            name,
+			Name:            cat.Name,
 			Description:     cat.Description,
 			AvailableScores: scores,
 			Chosen:          nil,
