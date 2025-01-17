@@ -14,7 +14,7 @@ type SupervisorRequest struct {
 	MaxTokens    int                     `json:"max_tokens" bson:"max_tokens"`
 	Temperature  float64                 `json:"temperature" bson:"temperature"`
 	TopP         int                     `json:"top_p" bson:"top_p"`
-	Task         Task                    `json:"task" bson:"task"`
+	Task         Task                    `json:"-" bson:"-"`
 }
 
 type SupervisorResponse struct {
