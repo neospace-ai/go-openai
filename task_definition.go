@@ -3,14 +3,16 @@ package openai
 type Task struct {
 	Name              string            `json:"name" bson:"name"`
 	Description       string            `json:"description" bson:"description"`
+	Type              string            `json:"type" bson:"type"`
 	Components        []TaskComponent   `json:"components" bson:"components"` // ComponentName: ComponentDetails
 	SupervisorProfile SupervisorProfile `json:"supervisor_profile" bson:"supervisor_profile"`
 }
 
 type TaskComponent struct {
-	Name        string `json:"name" bson:"name"`
-	Description string `json:"description" bson:"description"`
-	Type        string `json:"type" bson:"type"`
+	Name        string   `json:"name" bson:"name"`
+	Description string   `json:"description" bson:"description"`
+	Examples    []string `json:"examples" bson:"examples"`
+	Type        string   `json:"type" bson:"type"`
 }
 
 type SupervisorProfile struct {
