@@ -47,7 +47,7 @@ func (t *TaskSelectExpertises) ToGeneric() GenericTask {
 }
 
 type TaskResultCollection struct {
-	RawResponse         string                `json:"raw_response" bson:"raw_response"`
+	RawResponse         string                `json:"raw_response,omitempty" bson:"raw_response,omitempty"`
 	TaskGuard           *TaskGuard            `json:"task_guard,omitempty" bson:"task_guard,omitempty"`
 	TaskSelectExpertise *TaskSelectExpertises `json:"task_select_expertise,omitempty" bson:"task_select_expertise,omitempty"`
 }
