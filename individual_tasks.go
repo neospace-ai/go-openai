@@ -8,16 +8,16 @@ const (
 )
 
 type CategorySuggestions struct {
-	MacroCategory string `json:"macro_category" bson:"macro_category"`
-	SubCategory   string `json:"sub_category" bson:"sub_category"`
-	Justification string `json:"justification" bson:"justification"`
+	MacroCategory string `json:"macro_category,omitempty" bson:"macro_category,omitempty"`
+	SubCategory   string `json:"sub_category,omitempty" bson:"sub_category,omitempty"`
+	Justification string `json:"justification,omitempty" bson:"justification,omitempty"`
 }
 
 type TaskGuard struct {
 	GuardSafe           bool                `json:"guard_safe" bson:"guard_safe"`
 	GuardReasoning      string              `json:"guard_reasoning" bson:"guard_reasoning"`
 	GuardCategory       []string            `json:"guard_category" bson:"guard_category"`
-	CategorySuggestions CategorySuggestions `json:"category_suggestions" bson:"category_suggestions"`
+	CategorySuggestions CategorySuggestions `json:"category_suggestions,omitempty" bson:"category_suggestions,omitempty"`
 }
 
 func (t *TaskGuard) ToGeneric() GenericTask {
