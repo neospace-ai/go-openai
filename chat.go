@@ -223,6 +223,7 @@ type ChatCompletionRequest struct {
 	PresencePenalty  float32                       `json:"presence_penalty,omitempty" bson:"presence_penalty"`
 	ResponseFormat   *ChatCompletionResponseFormat `json:"response_format,omitempty" bson:"response_format"`
 	Seed             *int                          `json:"seed,omitempty" bson:"seed"`
+	StopAfterTaskK   *int                          `json:"stop_after_task_k,omitempty" bson:"stop_after_task_k"`
 	FrequencyPenalty float32                       `json:"frequency_penalty,omitempty" bson:"frequency_penalty"`
 	// LogitBias is must be a token id string (specified by their token ID in the tokenizer), not a word string.
 	// incorrect: `"logit_bias":{"You": 6}`, correct: `"logit_bias":{"1639": 6}`
