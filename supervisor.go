@@ -47,7 +47,7 @@ type supervisorTask struct {
 }
 
 type supervisorComponent struct {
-	Component       string            `json:"component"`
+	Category        string            `json:"category"`
 	Description     string            `json:"description"`
 	AvailableScores map[string]string `json:"available_scores"`
 }
@@ -79,7 +79,7 @@ func TransformTaskToSupervisorMechanics(task Task) supervisorMechanics {
 			availableScores[token] = scoreDetails.Description
 		}
 		components = append(components, supervisorComponent{
-			Component:       compDetails.Name,
+			Category:        compDetails.Name,
 			Description:     compDetails.Description,
 			AvailableScores: availableScores,
 		})
